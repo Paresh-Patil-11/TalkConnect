@@ -2,13 +2,12 @@ import { createContext, useState } from "react";
 import run from "../config/gemini";
 
 const MyContext = createContext();
-
 export { MyContext };
 
 const ContextProvider = (props) => {
   const [input, setInput] = useState("");
-  const [recentPrompt, setRecentPrompt] = useState(""); 
-  const [previousPrompt, setPreviousPrompt] = useState([]); 
+  const [recentPrompt, setRecentPrompt] = useState("");
+  const [previousPrompt, setPreviousPrompt] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resultData, setResultData] = useState("");
@@ -19,42 +18,37 @@ const ContextProvider = (props) => {
 
   const onSent = async () => {
     if (!input.trim()) return;
-    setResultData("");
+    setResultData(""); // clear any previous data
     setLoading(true);
     setShowResult(true);
     setRecentPrompt(input);
 
     try {
       const response = await run(input);
-      let responseArray = response.split("**");
-      let newResponse = "";
-      for (let i = 0; i < responseArray.length; i++) {
-        if (i === 0 || i % 2 === 0) {
-          newResponse += responseArray[i];
-        } else {
-          newResponse += "<b>" + responseArray[i] + "</b>";
-        }
-      }
+      if (!response) throw new Error("Empty response from Gemini API.");
 
-      let newResponse2 = newResponse.split("*").join("<br>");
+      // Format bold text using Markdown-style "**" to HTML <b>
+      let formattedResponse = response.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
 
-      setResultData(newResponse2);
-      let newResponseArray = newResponse2.split(" ");
-      for (let i = 0; i < newResponseArray.length; i++) {
-        const nextWord = newResponseArray[i];
-        setTimeout(() => delayPara(i, nextWord), i * 100);
-      }
+      // Replace single asterisk '*' with line breaks
+      formattedResponse = formattedResponse.replace(/\*/g, "<br>");
 
-      setPreviousPrompt((prevHistory) => {
-        const updatedHistory = [...prevHistory, input];
-        return updatedHistory;
+      // Animate word-by-word output
+      const words = formattedResponse.split(" ");
+      setResultData(""); // start with empty string before animation
+
+      words.forEach((word, i) => {
+        setTimeout(() => delayPara(i, word), i * 100);
       });
+
+      // Save prompt history
+      setPreviousPrompt((prevHistory) => [...prevHistory, input]);
     } catch (error) {
       console.error("Error in onSent:", error.message);
       setResultData("An error occurred. Please try again later.");
     } finally {
       setLoading(false);
-      setInput("");
+      setInput(""); // clear input field
     }
   };
 
