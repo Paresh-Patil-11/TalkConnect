@@ -1,29 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SideBar.css";
 import { assets } from "../../assets/assets";
 
 const SideBar = () => {
   const [extended, setExtended] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) {
+        setMobileOpen(false);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleMenuClick = () => {
+    if (isMobile) {
+      setMobileOpen(!mobileOpen);
+    } else {
+      setExtended(!extended);
+    }
+  };
 
   return (
-    <div className="sidebar">
+    <>
+      {isMobile && mobileOpen && (
+        <div 
+          className="sidebar-overlay active" 
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+      <div className={`sidebar ${!extended && !isMobile ? 'collapsed' : ''} ${isMobile && mobileOpen ? 'mobile-open' : ''}`}>
       <div className="top">
         <img
-          onClick={() => setExtended((prev) => !prev)}
+          onClick={handleMenuClick}
           className="menu"
           src={assets.menu_icon}
           alt="menuIcon"
         />
         <div className="newChat">
           <img src={assets.plus_icon} alt="chatIcon" />
-          {extended ? <p>New Chat</p> : null}
+          {(extended || (isMobile && mobileOpen)) ? <p>New Chat</p> : null}
         </div>
-        {extended ? (
+        {(extended || (isMobile && mobileOpen)) ? (
           <div className="recent">
             <p className="recent-title">Recent</p>
             <div className="recent-entry">
               <img src={assets.message_icon} alt="" />
               <p>What is react...</p>
+            </div>
+            <div className="recent-entry">
+              <img src={assets.message_icon} alt="" />
+              <p>Explain JavaScript...</p>
+            </div>
+            <div className="recent-entry">
+              <img src={assets.message_icon} alt="" />
+              <p>CSS Grid tutorial...</p>
             </div>
           </div>
         ) : null}
@@ -31,18 +69,19 @@ const SideBar = () => {
       <div className="bottom">
         <div className="bottom-item recent-entry">
           <img src={assets.question_icon} alt="" />
-          {extended ? <p>Help</p> : null}
+          {(extended || (isMobile && mobileOpen)) ? <p>Help</p> : null}
         </div>
         <div className="bottom-item recent-entry">
           <img src={assets.history_icon} alt="" />
-          {extended ? <p>Activity</p> : null}
+          {(extended || (isMobile && mobileOpen)) ? <p>Activity</p> : null}
         </div>
         <div className="bottom-item recent-entry">
           <img src={assets.setting_icon} alt="" />
-          {extended ? <p>Setting</p> : null}
+          {(extended || (isMobile && mobileOpen)) ? <p>Settings</p> : null}
         </div>
       </div>
     </div>
+    </>
   );
 };
 
