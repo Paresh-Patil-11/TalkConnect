@@ -18,6 +18,10 @@ const ContextProvider = (props) => {
 
   const onSent = async () => {
     if (!input.trim()) return;
+    
+    // Add to previous prompts immediately
+    setPreviousPrompt((prevHistory) => [...prevHistory, input]);
+    
     setResultData(""); // clear any previous data
     setLoading(true);
     setShowResult(true);
@@ -41,8 +45,6 @@ const ContextProvider = (props) => {
         setTimeout(() => delayPara(i, word), i * 100);
       });
 
-      // Save prompt history
-      setPreviousPrompt((prevHistory) => [...prevHistory, input]);
     } catch (error) {
       console.error("Error in onSent:", error.message);
       setResultData("An error occurred. Please try again later.");

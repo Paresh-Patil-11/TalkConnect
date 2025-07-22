@@ -15,10 +15,12 @@ const Main = () => {
   } = useContext(MyContext);
 
   const [isMobile, setIsMobile] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
+      setSidebarCollapsed(window.innerWidth <= 1024);
     };
 
     checkMobile();
@@ -28,7 +30,6 @@ const Main = () => {
 
   const handleCardClick = (prompt) => {
     setInput(prompt);
-    onSent(prompt);
   };
 
   const handleKeyPress = (e) => {
@@ -38,10 +39,21 @@ const Main = () => {
     }
   };
 
+  const quickActions = [
+    "💡 Explain concept",
+    "🔧 Debug code", 
+    "📝 Write documentation",
+    "🎨 Design ideas",
+    "🚀 Optimize performance"
+  ];
+
+  const handleQuickAction = (action) => {
+    setInput(action.replace(/[💡🔧📝🎨🚀]\s/, ''));
+  };
   return (
     <div className="main">
       <div className="nav">
-        <p>✨ Gemini Clone</p>
+        <p>✨ AI Development Assistant</p>
         <img src={assets?.user_icon || ""} alt="User Icon" />
       </div>
       <div className="main-container">
@@ -49,27 +61,27 @@ const Main = () => {
           <>
             <div className="greet">
               <p>
-                <span>Hello, Developer!</span>
+                <span>Welcome, Developer!</span>
               </p>
-              <p>How can I help you today?</p>
+              <p>Let's build something amazing together</p>
             </div>
             <div className="cards">
-              <div className="card" onClick={() => handleCardClick("Suggest beautiful places to see on an upcoming road trip")}>
-                <p>Suggest beautiful places to see on an upcoming road trip</p>
+              <div className="card" onClick={() => handleCardClick("Help me create a responsive React component")}>
+                <p>Help me create a responsive React component</p>
                 <img src={assets?.compass_icon || ""} alt="Compass Icon" />
               </div>
-              <div className="card" onClick={() => handleCardClick("Briefly summarize this concept: React Hooks")}>
-                <p>Briefly summarize this concept: React Hooks</p>
+              <div className="card" onClick={() => handleCardClick("Explain modern JavaScript ES6+ features")}>
+                <p>Explain modern JavaScript ES6+ features</p>
                 <img src={assets?.bulb_icon || ""} alt="Bulb Icon" />
               </div>
-              <div className="card" onClick={() => handleCardClick("Brainstorm team bonding activities for our next work retreat")}>
+              <div className="card" onClick={() => handleCardClick("Review my code for best practices and optimization")}>
                 <p>
-                  Brainstorm team bonding activities for our next work retreat
+                  Review my code for best practices and optimization
                 </p>
                 <img src={assets?.message_icon || ""} alt="Message Icon" />
               </div>
-              <div className="card" onClick={() => handleCardClick("Improve the readability of the following code")}>
-                <p>Improve the readability of the following code</p>
+              <div className="card" onClick={() => handleCardClick("Generate API documentation and examples")}>
+                <p>Generate API documentation and examples</p>
                 <img src={assets?.code_icon || ""} alt="Code Icon" />
               </div>
             </div>
@@ -99,28 +111,42 @@ const Main = () => {
           </div>
         )}
 
-        <div className="main-bottom">
+        <div className={`main-bottom ${sidebarCollapsed && !isMobile ? 'sidebar-collapsed' : ''}`}>
+          <div className="quick-actions">
+            {quickActions.map((action, index) => (
+              <div 
+                key={index}
+                className="quick-action"
+                onClick={() => handleQuickAction(action)}
+              >
+                {action}
+              </div>
+            ))}
+          </div>
           <div className="search-box">
             <input
               type="text"
-              placeholder="Enter a prompt here"
+              placeholder="Ask me anything about development..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
             />
-            <div>
+            <div className="input-controls">
               <img src={assets?.gallery_icon || ""} alt="Gallery Icon" />
               <img src={assets?.mic_icon || ""} alt="Mic Icon" />
+            </div>
+            <div>
               <img
+                className={`send-button ${!input.trim() ? 'disabled' : ''}`}
                 src={assets?.send_icon || ""}
                 alt="Send Icon"
                 onClick={onSent}
-                style={{ cursor: input.trim() ? 'pointer' : 'not-allowed', opacity: input.trim() ? 1 : 0.5 }}
+                disabled={!input.trim()}
               />
             </div>
           </div>
           <p className="bottom-info">
-            Created with 💜 by <b><i>Paresh</i></b> • Enhanced UI/UX
+            AI Development Assistant • Built with ❤️ for Developers
           </p>
         </div>
       </div>

@@ -53,15 +53,19 @@ const SideBar = () => {
             <p className="recent-title">Recent</p>
             <div className="recent-entry">
               <img src={assets.message_icon} alt="" />
-              <p>What is react...</p>
+              <p>React component help...</p>
             </div>
             <div className="recent-entry">
               <img src={assets.message_icon} alt="" />
-              <p>Explain JavaScript...</p>
+              <p>JavaScript ES6 features...</p>
             </div>
             <div className="recent-entry">
               <img src={assets.message_icon} alt="" />
-              <p>CSS Grid tutorial...</p>
+              <p>Code review request...</p>
+            </div>
+            <div className="recent-entry">
+              <img src={assets.message_icon} alt="" />
+              <p>API documentation...</p>
             </div>
           </div>
         ) : null}
