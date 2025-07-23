@@ -53,7 +53,7 @@ const Main = () => {
   return (
     <div className="main">
       <div className="nav">
-        <p>✨ AI Development Assistant</p>
+        <p>✨ TalkConnect Assistant</p>
         <img src={assets?.user_icon || ""} alt="User Icon" />
       </div>
       <div className="main-container">
