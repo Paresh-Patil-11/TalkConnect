@@ -63,7 +63,7 @@ const Main = () => {
               <p>
                 <span>Welcome, Developer!</span>
               </p>
-              <p>Let's build something amazing together</p>
+             
             </div>
             <div className="cards">
               <div className="card" onClick={() => handleCardClick("Help me create a responsive React component")}>
@@ -80,10 +80,7 @@ const Main = () => {
                 </p>
                 <img src={assets?.message_icon || ""} alt="Message Icon" />
               </div>
-              <div className="card" onClick={() => handleCardClick("Generate API documentation and examples")}>
-                <p>Generate API documentation and examples</p>
-                <img src={assets?.code_icon || ""} alt="Code Icon" />
-              </div>
+              
             </div>
           </>
         ) : (
