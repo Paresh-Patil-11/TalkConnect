@@ -143,7 +143,7 @@ const Main = () => {
             </div>
           </div>
           <p className="bottom-info">
-            AI Development Assistant • Built with ❤️ for Developers
+           Built with 🤍 by Paresh for developers.
           </p>
         </div>
       </div>
