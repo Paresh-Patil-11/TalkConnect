@@ -107,9 +107,9 @@ const Main = () => {
             </div>
           </div>
         )}
-
+ 
         <div className={`main-bottom ${sidebarCollapsed && !isMobile ? 'sidebar-collapsed' : ''}`}>
-          <div className="quick-actions">
+{/*           <div className="quick-actions">
             {quickActions.map((action, index) => (
               <div 
                 key={index}
@@ -119,7 +119,7 @@ const Main = () => {
                 {action}
               </div>
             ))}
-          </div>
+          </div> */}
           <div className="search-box">
             <input
               type="text"
