@@ -1,11 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+// IMPORTANT: Get a NEW API key from https://makersuite.google.com/app/apikey
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyBzji4oFM5sUXSDgdNjm4gHE2j9sfHmkxI";
 const genAI = new GoogleGenerativeAI(apiKey);
 
-// Updated model name - use gemini-1.5-flash or gemini-1.5-pro
+// Use gemini-pro which is available on v1 API
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash", // Changed from "gemini-pro"
+  model: "gemini-pro",
 });
 
 const generationConfig = {
@@ -29,7 +30,15 @@ async function run(prompt) {
   } catch (error) {
     console.error("Error in Gemini API:", error);
     console.error("Error details:", error.message);
-    throw error;
+    
+    // Return user-friendly error message
+    if (error.message?.includes('API key')) {
+      return "⚠️ Invalid API key. Please get a new API key from https://makersuite.google.com/app/apikey";
+    } else if (error.message?.includes('quota')) {
+      return "⚠️ API quota exceeded. Please try again later or check your quota at https://makersuite.google.com/app/apikey";
+    } else {
+      return "⚠️ Sorry, I encountered an error. Please try again.";
+    }
   }
 }
 
