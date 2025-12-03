@@ -30,7 +30,7 @@ async function run(prompt) {
 
     // User-friendly error messages
     if (error.message?.includes("API key")) {
-      return "⚠️ Invalid API key. Please get a new API key from https://makersuite.google.com/app/apikey";
+      return `⚠️ Invalid API key.${apiKey} Please get a new API key from https://makersuite.google.com/app/apikey`;
     } else if (error.message?.includes("quota")) {
       return "⚠️ API quota exceeded. Please try again later or check your quota at https://makersuite.google.com/app/apikey";
     } else {
