@@ -40,7 +40,7 @@ const Sidebar = () => {
       {/* Mobile Overlay */}
       {isMobile && mobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-black/50 z-40"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -49,49 +49,47 @@ const Sidebar = () => {
       <div 
         className={`
           fixed lg:relative top-0 left-0 h-screen z-50
-          bg-dark/95 backdrop-blur-xl border-r border-primary/20
-          flex flex-col p-6 transition-all duration-300
-          ${extended && !isMobile ? 'w-64' : 'w-20'}
+          bg-white border-r border-gray-200
+          flex flex-col transition-all duration-300
+          ${extended && !isMobile ? 'w-64' : 'w-16'}
           ${isMobile ? (mobileOpen ? 'translate-x-0' : '-translate-x-full') : ''}
         `}
       >
         {/* Top Section */}
-        <div className="flex-1">
+        <div className="flex-1 p-3">
           {/* Menu Button */}
           <button
             onClick={handleMenuClick}
-            className="w-7 h-7 mb-8 opacity-80 hover:opacity-100 
-                     hover:bg-primary/10 rounded-lg p-1 transition-all"
+            className="w-10 h-10 mb-4 flex items-center justify-center
+                     hover:bg-gray-100 rounded-lg transition-colors"
           >
             <img 
               src={assets.menu_icon} 
               alt="Menu" 
-              className="w-full h-full brightness-0 invert"
+              className="w-5 h-5 opacity-70"
             />
           </button>
 
           {/* New Chat Button */}
           <button
             onClick={newChat}
-            className="flex items-center justify-center gap-3 w-full
-                     bg-gradient-to-r from-primary to-secondary
-                     text-white rounded-xl px-5 py-3.5 mb-6
-                     font-semibold text-[15px] shadow-lg shadow-primary/30
-                     hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5
-                     active:translate-y-0 transition-all duration-200"
+            className="flex items-center justify-center gap-2 w-full
+                     bg-white border border-gray-300 hover:bg-gray-50
+                     text-gray-700 rounded-lg px-3 py-2.5 mb-4
+                     text-sm font-medium transition-colors"
           >
             <img 
               src={assets.plus_icon} 
               alt="New" 
-              className="w-5 h-5 brightness-0 invert"
+              className="w-4 h-4 opacity-70"
             />
-            {(extended || (isMobile && mobileOpen)) && <span>New Chat</span>}
+            {(extended || (isMobile && mobileOpen)) && <span>New chat</span>}
           </button>
 
           {/* Recent Chats */}
           {(extended || (isMobile && mobileOpen)) && previousPrompt.length > 0 && (
-            <div className="mt-6">
-              <h3 className="text-xs text-white/60 font-bold uppercase tracking-wider mb-3 px-3">
+            <div className="mt-4">
+              <h3 className="text-xs text-gray-500 font-medium px-3 mb-2">
                 Recent
               </h3>
               <div className="space-y-1">
@@ -99,18 +97,16 @@ const Sidebar = () => {
                   <button
                     key={index}
                     onClick={() => loadPrompt(item)}
-                    className="flex items-center gap-3 w-full p-3 rounded-lg
-                             border border-transparent hover:bg-primary/10 
-                             hover:border-primary/30 hover:translate-x-1
-                             transition-all duration-200 group"
+                    className="flex items-center gap-3 w-full p-2.5 rounded-lg
+                             text-gray-700 hover:bg-gray-100 transition-colors
+                             text-left"
                   >
                     <img 
                       src={assets.message_icon} 
                       alt="" 
-                      className="w-[18px] h-[18px] opacity-70 brightness-0 invert
-                               group-hover:opacity-100 transition-opacity"
+                      className="w-4 h-4 opacity-60 flex-shrink-0"
                     />
-                    <p className="text-sm text-white/85 truncate group-hover:text-white">
+                    <p className="text-sm truncate">
                       {item.substring(0, 30)}{item.length > 30 ? '...' : ''}
                     </p>
                   </button>
@@ -121,55 +117,46 @@ const Sidebar = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-primary/20 pt-5 space-y-1">
+        <div className="border-t border-gray-200 p-3 space-y-1">
           <button
-            className="flex items-center gap-3 w-full p-3 rounded-lg
-                     border border-transparent hover:bg-primary/10 
-                     hover:border-primary/30 hover:translate-x-1
-                     transition-all duration-200 group"
+            className="flex items-center gap-3 w-full p-2.5 rounded-lg
+                     text-gray-700 hover:bg-gray-100 transition-colors"
           >
             <img 
               src={assets.question_icon} 
               alt="Help" 
-              className="w-[18px] h-[18px] opacity-70 brightness-0 invert
-                       group-hover:opacity-100 transition-opacity"
+              className="w-4 h-4 opacity-60"
             />
             {(extended || (isMobile && mobileOpen)) && (
-              <span className="text-sm text-white/85 group-hover:text-white">Help</span>
+              <span className="text-sm">Help</span>
             )}
           </button>
 
           <button
-            className="flex items-center gap-3 w-full p-3 rounded-lg
-                     border border-transparent hover:bg-primary/10 
-                     hover:border-primary/30 hover:translate-x-1
-                     transition-all duration-200 group"
+            className="flex items-center gap-3 w-full p-2.5 rounded-lg
+                     text-gray-700 hover:bg-gray-100 transition-colors"
           >
             <img 
               src={assets.history_icon} 
               alt="Activity" 
-              className="w-[18px] h-[18px] opacity-70 brightness-0 invert
-                       group-hover:opacity-100 transition-opacity"
+              className="w-4 h-4 opacity-60"
             />
             {(extended || (isMobile && mobileOpen)) && (
-              <span className="text-sm text-white/85 group-hover:text-white">Activity</span>
+              <span className="text-sm">Activity</span>
             )}
           </button>
 
           <button
-            className="flex items-center gap-3 w-full p-3 rounded-lg
-                     border border-transparent hover:bg-primary/10 
-                     hover:border-primary/30 hover:translate-x-1
-                     transition-all duration-200 group"
+            className="flex items-center gap-3 w-full p-2.5 rounded-lg
+                     text-gray-700 hover:bg-gray-100 transition-colors"
           >
             <img 
               src={assets.setting_icon} 
               alt="Settings" 
-              className="w-[18px] h-[18px] opacity-70 brightness-0 invert
-                       group-hover:opacity-100 transition-opacity"
+              className="w-4 h-4 opacity-60"
             />
             {(extended || (isMobile && mobileOpen)) && (
-              <span className="text-sm text-white/85 group-hover:text-white">Settings</span>
+              <span className="text-sm">Settings</span>
             )}
           </button>
         </div>
