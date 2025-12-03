@@ -4,7 +4,7 @@ import run from "../config/gemini";
 const MyContext = createContext();
 export { MyContext };
 
-const ContextProvider = (props) => {
+const ContextProvider = ({ children }) => {
   const [input, setInput] = useState("");
   const [recentPrompt, setRecentPrompt] = useState("");
   const [previousPrompt, setPreviousPrompt] = useState([]);
@@ -12,12 +12,14 @@ const ContextProvider = (props) => {
   const [loading, setLoading] = useState(false);
   const [resultData, setResultData] = useState("");
 
+  // Typing effect
   const delayPara = (index, nextWord) => {
     setTimeout(() => {
       setResultData((prev) => prev + nextWord);
     }, 50 * index);
   };
 
+  // Reset chat
   const newChat = () => {
     setShowResult(false);
     setLoading(false);
@@ -27,11 +29,9 @@ const ContextProvider = (props) => {
   };
 
   const onSent = async (prompt) => {
-    const currentPrompt = prompt !== undefined ? prompt : input;
-    
-    if (!currentPrompt.trim()) {
-      return;
-    }
+    const currentPrompt = prompt ?? input;
+
+    if (!currentPrompt.trim()) return;
 
     setResultData("");
     setLoading(true);
@@ -45,33 +45,22 @@ const ContextProvider = (props) => {
 
     try {
       const response = await run(currentPrompt);
-      
+
       if (!response) {
         throw new Error("Empty response received from API");
       }
 
-      // Format response with bold text
-      let responseArray = response.split("**");
-      let newResponse = "";
-      
-      for (let i = 0; i < responseArray.length; i++) {
-        if (i === 0 || i % 2 !== 1) {
-          newResponse += responseArray[i];
-        } else {
-          newResponse += "<b>" + responseArray[i] + "</b>";
-        }
-      }
-      
-      // Format response with line breaks
-      let newResponse2 = newResponse.split("*").join("<br/>");
-      
-      // Add typing effect
-      let newResponseArray = newResponse2.split(" ");
-      
-      for (let i = 0; i < newResponseArray.length; i++) {
-        const nextWord = newResponseArray[i];
-        delayPara(i, nextWord + " ");
-      }
+      // Simple formatting: bold with ** and line breaks with *
+      const formatted = response
+        .split("**")
+        .map((part, i) => (i % 2 === 1 ? `<b>${part}</b>` : part))
+        .join("")
+        .split("*")
+        .join("<br/>");
+
+      // Typing effect word by word
+      const words = formatted.split(" ");
+      words.forEach((word, i) => delayPara(i, word + " "));
 
     } catch (error) {
       console.error("Error in onSent:", error);
@@ -95,11 +84,7 @@ const ContextProvider = (props) => {
     newChat,
   };
 
-  return (
-    <MyContext.Provider value={contextValue}>
-      {props.children}
-    </MyContext.Provider>
-  );
+  return <MyContext.Provider value={contextValue}>{children}</MyContext.Provider>;
 };
 
 export default ContextProvider;
