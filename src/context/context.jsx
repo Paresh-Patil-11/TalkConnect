@@ -1,6 +1,6 @@
 // src/context/MyContext.js
 import { createContext, useState } from "react";
-import run from "../config/gemini";
+import run from "../config/openai";
 
 const MyContext = createContext();
 export { MyContext };
@@ -54,7 +54,6 @@ const ContextProvider = ({ children }) => {
 
       // Typing effect
       formatted.split(" ").forEach((word, i) => delayPara(i, word + " "));
-
     } catch (error) {
       console.error("Error in onSent:", error);
       setResultData(
