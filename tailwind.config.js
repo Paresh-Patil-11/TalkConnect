@@ -6,12 +6,7 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: '#60a5fa',
-        secondary: '#a78bfa',
-        dark: '#0f172a',
-        darker: '#1e293b',
-      },
+      // Using standard Tailwind colors - no custom color scheme
     },
   },
   plugins: [],
