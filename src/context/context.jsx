@@ -1,3 +1,4 @@
+// src/context/MyContext.js
 import { createContext, useState } from "react";
 import run from "../config/gemini";
 
@@ -12,14 +13,12 @@ const ContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [resultData, setResultData] = useState("");
 
-  // Typing effect
   const delayPara = (index, nextWord) => {
     setTimeout(() => {
       setResultData((prev) => prev + nextWord);
     }, 50 * index);
   };
 
-  // Reset chat
   const newChat = () => {
     setShowResult(false);
     setLoading(false);
@@ -38,19 +37,14 @@ const ContextProvider = ({ children }) => {
     setShowResult(true);
     setRecentPrompt(currentPrompt);
 
-    if (prompt === undefined) {
-      setPreviousPrompt((prev) => [...prev, currentPrompt]);
-      setInput("");
-    }
+    if (!prompt) setPreviousPrompt((prev) => [...prev, currentPrompt]);
 
     try {
       const response = await run(currentPrompt);
 
-      if (!response) {
-        throw new Error("Empty response received from API");
-      }
+      if (!response) throw new Error("Empty response from API");
 
-      // Simple formatting: bold with ** and line breaks with *
+      // Simple formatting: bold ** and line breaks *
       const formatted = response
         .split("**")
         .map((part, i) => (i % 2 === 1 ? `<b>${part}</b>` : part))
@@ -58,33 +52,38 @@ const ContextProvider = ({ children }) => {
         .split("*")
         .join("<br/>");
 
-      // Typing effect word by word
-      const words = formatted.split(" ");
-      words.forEach((word, i) => delayPara(i, word + " "));
+      // Typing effect
+      formatted.split(" ").forEach((word, i) => delayPara(i, word + " "));
 
     } catch (error) {
       console.error("Error in onSent:", error);
-      setResultData("⚠️ Sorry, I encountered an error processing your request. Please try again.");
+      setResultData(
+        "⚠️ Sorry, I encountered an error processing your request. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const contextValue = {
-    previousPrompt,
-    setPreviousPrompt,
-    onSent,
-    setRecentPrompt,
-    recentPrompt,
-    showResult,
-    loading,
-    resultData,
-    input,
-    setInput,
-    newChat,
-  };
-
-  return <MyContext.Provider value={contextValue}>{children}</MyContext.Provider>;
+  return (
+    <MyContext.Provider
+      value={{
+        previousPrompt,
+        setPreviousPrompt,
+        onSent,
+        setRecentPrompt,
+        recentPrompt,
+        showResult,
+        loading,
+        resultData,
+        input,
+        setInput,
+        newChat,
+      }}
+    >
+      {children}
+    </MyContext.Provider>
+  );
 };
 
 export default ContextProvider;
