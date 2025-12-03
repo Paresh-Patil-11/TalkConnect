@@ -3,14 +3,14 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyBzji4oFM5sUXSDgdNjm4gHE2j9sfHmkxI";
 const genAI = new GoogleGenerativeAI(apiKey);
 
+// Updated model name - use gemini-1.5-flash or gemini-1.5-pro
 const model = genAI.getGenerativeModel({
-  model: "gemini-pro",
+  model: "gemini-1.5-flash", // Changed from "gemini-pro"
 });
 
 const generationConfig = {
   temperature: 0.9,
   topP: 1,
-  topK: 1,
   maxOutputTokens: 2048,
 };
 
@@ -22,12 +22,13 @@ async function run(prompt) {
     });
 
     const result = await chatSession.sendMessage(prompt);
-    const response = await result.response;
+    const response = result.response;
     const text = response.text();
     
     return text;
   } catch (error) {
     console.error("Error in Gemini API:", error);
+    console.error("Error details:", error.message);
     throw error;
   }
 }
