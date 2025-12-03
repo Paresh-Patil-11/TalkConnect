@@ -1,14 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// IMPORTANT: Get a NEW API key from https://makersuite.google.com/app/apikey
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY_HERE";
-
-// Initialize the client using v1 (not v1beta)
+const apiKey = import.meta.env.API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey, { apiVersion: "v1" });
-
-// Use a valid Gemini model
 const model = genAI.getGenerativeModel({
-  model: "gemini-pro", // works in v1 API
+  model: "gemini-pro", 
 });
 
 const generationConfig = {
