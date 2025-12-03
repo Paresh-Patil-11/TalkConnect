@@ -1,4 +1,7 @@
 {
+  "scripts": {
+  "build": "npx vite build"
+},
   "name": "geminiclone",
   "private": true,
   "version": "0.0.0",
